@@ -12,10 +12,12 @@ class Userstudy(object):
     def __init__(self, num_q):
         self.num_q = num_q
         self.imgdir = './userstudy_data/'
-        self.dataset = ['ours', 'drit', 'munit', 'cdgan']
-        self.dataset_pick_num = [10, 10, 10, 10]
-        self.userstudy_df = pd.read_csv('./userstudy.csv').sample(70)
-        self.real_filenames = random.sample(glob.glob(self.imgdir+'real/*.jpg'), 40)
+        self.dataset = ['ours', 'drit', 'munit']
+            #['ours', 'drit', 'munit', 'cdgan']
+        self.dataset_pick_num = [10, 10, 10]
+            #[10, 10, 10, 10]
+        self.userstudy_df = pd.read_csv('./userstudy.csv').sample(60)
+        self.real_filenames = random.sample(glob.glob(self.imgdir+'real/*.jpg'), 30)
 
     def init_userinfo(self):
         self.uname = input("Enter your name in english")
@@ -41,20 +43,20 @@ class Userstudy(object):
         }
 
     def make_question_pair(self):
-        AB_list = self.userstudy_df.iloc[:40]['ours_AB'].tolist()
+        AB_list = self.userstudy_df.iloc[:30]['ours_AB'].tolist()
         ours_list = map(lambda x:(self.imgdir+'ours/' + x, 'ours'), AB_list[:10])
         drit_list = map(lambda x:(self.imgdir + 'drit/' + x, 'drit'), AB_list[10:20])
         munit_list = map(lambda x:(self.imgdir + 'munit/' + x, 'munit'), AB_list[20:30])
-        cdgan_list = map(lambda x:(self.imgdir + 'cdgan/' + x, 'cdgan'), AB_list[30:40])
+        #cdgan_list = map(lambda x:(self.imgdir + 'cdgan/' + x, 'cdgan'), AB_list[30:40])
         ab_list = []
         ab_list.extend(ours_list)
         ab_list.extend(drit_list)
         ab_list.extend(munit_list)
-        ab_list.extend(cdgan_list)
+        #ab_list.extend(cdgan_list)
         random.shuffle(ab_list)
 
         real_Q = [pair for pair in zip(ab_list, self.real_filenames)]
-        ours_Q = self.userstudy_df.iloc[40:]['ours_AB'].tolist()
+        ours_Q = self.userstudy_df.iloc[30:]['ours_AB'].tolist()
         return real_Q, ours_Q
 
     def run(self):
